@@ -1,4 +1,5 @@
 const buttonAgregar = document.getElementById("btnAgregar");
+const buttonClear = document.getElementById("btnClear")
 const txtNombre = document.getElementById("Name");
 const txtNumber = document.getElementById("Number");
 const alertValidiaciones = document.getElementById("alertValidaciones");
@@ -17,6 +18,10 @@ let precio=0;
 let costoTotal=0;
 let totalEnProductos=0;
 
+
+//..............JSON............................--------------------------------------------------------...............................................
+
+let datos = new Array ();
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 function validarCantidad () {
@@ -70,9 +75,18 @@ buttonAgregar.addEventListener("click", function (event) {
                        <td>${txtNombre.value}</td>
                        <td>${txtNumber.value}</td>
                        <td>${precio}</td>
-                     </tr>`
+                     </tr>`;
+//___________JSON____________________________________________________________________________________________________________________________________
+        let elemento = {"contador": contador,
+                        "nombre": txtNombre.value,
+                        "cantidad": txtNumber.value,
+                        "precio": precio};
+        datos.push (elemento)
+        localStorage.setItem("datos", JSON.stringify(datos));
         cuerpoTabla.insertAdjacentHTML("beforeend", row);
-       
+     //_____////////////////////////////////////////////////////////////////////////////////////////////////////////___________________________________________________________________________________________________________________
+
+
        costoTotal = precio * Number(txtNumber.value);
        totalEnProductos += Number(txtNumber.value);
        contadorProductos.innerText = contador; 
@@ -92,7 +106,25 @@ buttonAgregar.addEventListener("click", function (event) {
     
 }) //buttonAgregar
 
-
+//____________________________LIMPIAR__________________________________________________________________________________________________________________________________
+buttonClear.addEventListener("click", function (event) {
+    event.preventDefault
+    //limpiar valor de los campos
+    txtNombre.value="";
+    txtNumber.value="";
+    //limpiar el localStorage
+    localStorage.clear();
+    //limpiar la tabla
+    cuerpoTabla.innerHTML="";
+    //ocultar alerta
+    //reiniciar variables
+    contador=0;
+    costoTotal=0;
+    totalEnProductos=0;
+    //quitar los bordes
+    //asignar variables a divs
+    
+})
 
   //ojo con el uso de !: .........................................................................................................................
 //    if (! validarCantidad()) {
@@ -125,6 +157,15 @@ window.addEventListener("load", function () {
     productosTotal.innerText = totalEnProductos;
     precioTotal.innerText="$" + costoTotal.toFixed(2);
 
-
-    
-}); //windows load
+    if (localStorage.getItem("datos")!=null) {
+        datos = JSON.parse(this.localStorage.getItem("datos"));
+    }
+    datos.forEach(r=> {
+        let row = `<tr>
+                       <td>${r.contador}</td>
+                       <td>${r.nombre}</td>
+                       <td>${r.cantidad}</td>
+                       <td>${r.precio}</td>
+                   </tr>`
+ } )}
+)
